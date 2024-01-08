@@ -2,23 +2,27 @@
 import flatpickr from 'flatpickr';
 // Додатковий імпорт стилів
 import 'flatpickr/dist/flatpickr.min.css';
+import * as iziToast from 'izitoast';
 
 const startButton = document.querySelector('[data-start]');
-let inputValue = document.querySelector('#datetime-picker');
 let userSelectedDate;
+startButton.setAttribute('disabled', true);
 
-flatpickr('#datetime-picker', {
+const timerOfInput = flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
-    userSelectedDate = inputValue.value;
-    if (userSelectedDate > this.defaultDate) {
+    userSelectedDate = selectedDates[0];
+    if (userSelectedDate > new Date()) {
       startButton.removeAttribute('disabled');
-    } else if (userSelectedDate < this.defaultDate) {
-      window.alert('Please choose a date in the future');
+    } else {
+      iziToast.show({
+        title: 'Please choose a date in the future',
+        position: 'center',
+      });
     }
   },
 });
@@ -42,4 +46,13 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-startButton.addEventListener('click', event => {});
+startButton.addEventListener('click', () => {
+  startButton.setAttribute('disable');
+  const interval = userSelectedDate - new Date();
+  const { days, hours, minutes, seconds } = convertMs(interval);
+  const remainingTime = setInterval(interval, 1000);
+  if (remainingTime <= 0) {
+    clearInterval(remainingTime);
+    return;
+  }
+});
