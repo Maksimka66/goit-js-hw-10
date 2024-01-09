@@ -10,7 +10,7 @@ const rejectedRadio = document.querySelector('input[value="rejected"]');
 
 submitButton.addEventListener('click', () => {
   const delay = delayInput.value;
-  promise = new Promise((fulfilled, rejected) => {
+  const promise = new Promise((fulfilled, rejected) => {
     setTimeout(() => {
       if (fulfilledRadio.checked === true) {
         fulfilled(delay);
