@@ -2,26 +2,32 @@
 import flatpickr from 'flatpickr';
 // Додатковий імпорт стилів
 import 'flatpickr/dist/flatpickr.min.css';
-import * as iziToast from 'izitoast';
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
 
 const startButton = document.querySelector('[data-start]');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
 let userSelectedDate;
 startButton.setAttribute('disabled', true);
 
-const timerOfInput = flatpickr('#datetime-picker', {
+flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
     userSelectedDate = selectedDates[0];
     if (userSelectedDate > new Date()) {
       startButton.removeAttribute('disabled');
     } else {
-      iziToast.show({
+      iziToast.error({
         title: 'Please choose a date in the future',
-        position: 'center',
+        position: 'topRight',
       });
     }
   },
@@ -47,12 +53,22 @@ function convertMs(ms) {
 }
 
 startButton.addEventListener('click', () => {
-  startButton.setAttribute('disable');
-  const interval = userSelectedDate - new Date();
-  const { days, hours, minutes, seconds } = convertMs(interval);
-  const remainingTime = setInterval(interval, 1000);
-  if (remainingTime <= 0) {
-    clearInterval(remainingTime);
-    return;
-  }
+  startButton.setAttribute('disabled', true);
+  let interval = userSelectedDate - new Date();
+  const remainingTime = setInterval(() => {
+    interval -= 1000;
+    const { days, hours, minutes, seconds } = convertMs(interval);
+    daysEl.textContent = addLeadingZero(days);
+    hoursEl.textContent = addLeadingZero(hours);
+    minutesEl.textContent = addLeadingZero(minutes);
+    secondsEl.textContent = addLeadingZero(seconds);
+
+    function addLeadingZero(value) {
+      return value.toString().padStart(2, '0');
+    }
+
+    if (seconds === 0) {
+      clearInterval(remainingTime);
+    }
+  }, 1000);
 });
