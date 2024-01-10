@@ -3,19 +3,20 @@ import iziToast from 'izitoast';
 // Додатковий імпорт стилів
 import 'izitoast/dist/css/iziToast.min.css';
 
-const submitButton = document.querySelector('button[type="submit"]');
+const submitForm = document.querySelector('.form');
 const delayInput = document.querySelector('input[name="delay"]');
 const fulfilledRadio = document.querySelector('input[value="fulfilled"]');
 const rejectedRadio = document.querySelector('input[value="rejected"]');
 
-submitButton.addEventListener('click', () => {
+submitForm.addEventListener('submit', event => {
+  event.preventDefault();
   const delay = delayInput.value;
-  const promise = new Promise((fulfilled, rejected) => {
+  const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
       if (fulfilledRadio.checked === true) {
-        fulfilled(delay);
+        resolve(delay);
       } else if (rejectedRadio.checked === true) {
-        rejected(delay);
+        reject(delay);
       }
     }, delay);
   });
@@ -33,4 +34,5 @@ submitButton.addEventListener('click', () => {
         position: 'topRight',
       });
     });
+  submitForm.elements.delay.value = '';
 });
