@@ -54,7 +54,7 @@ function convertMs(ms) {
 
 startButton.addEventListener('click', () => {
   startButton.setAttribute('disabled', true);
-  let interval = userSelectedDate - new Date();
+  let interval = userSelectedDate - Date.now();
   const remainingTime = setInterval(() => {
     interval -= 1000;
     const { days, hours, minutes, seconds } = convertMs(interval);

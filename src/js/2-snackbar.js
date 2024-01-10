@@ -34,5 +34,5 @@ submitForm.addEventListener('submit', event => {
         position: 'topRight',
       });
     });
-  submitForm.elements.delay.value = '';
+  event.currentTarget.reset();
 });
