@@ -27,13 +27,12 @@ submitForm.addEventListener('submit', event => {
         title: `✅ Fulfilled promise in ${delay}ms`,
         position: 'topRight',
       });
-      submitForm.reset();
     })
     .catch(delay => {
       iziToast.error({
         title: `❌ Rejected promise in ${delay}ms`,
         position: 'topRight',
       });
-      submitForm.reset();
     });
+  event.target.reset();
 });
