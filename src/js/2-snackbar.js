@@ -33,6 +33,8 @@ submitForm.addEventListener('submit', event => {
         title: `❌ Rejected promise in ${delay}ms`,
         position: 'topRight',
       });
+    })
+    .finally(() => {
+      event.target.reset();
     });
-  event.target.reset();
 });
