@@ -11,11 +11,13 @@ const rejectedRadio = document.querySelector('input[value="rejected"]');
 submitForm.addEventListener('submit', event => {
   event.preventDefault();
   const delay = delayInput.value;
+  const fulfilledButton = fulfilledRadio.checked;
+  const rejectedButton = rejectedRadio.checked;
   const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (fulfilledRadio.checked === true) {
+      if (fulfilledButton === true) {
         resolve(delay);
-      } else if (rejectedRadio.checked === true) {
+      } else if (rejectedButton === true) {
         reject(delay);
       }
     }, delay);
@@ -33,8 +35,6 @@ submitForm.addEventListener('submit', event => {
         title: `❌ Rejected promise in ${delay}ms`,
         position: 'topRight',
       });
-    })
-    .finally(() => {
-      event.target.reset();
     });
+  event.target.reset();
 });
